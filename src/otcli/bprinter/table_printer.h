@@ -1,6 +1,8 @@
 #ifndef BPRINTER_TABLE_PRINTER_H_
 #define BPRINTER_TABLE_PRINTER_H_
 
+#include "../utils.hpp" // debug, SplitString()
+
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -44,7 +46,7 @@ public:
   void SetTableColor(const std::string & color) { this->table_color=color; }
   void SetContentColor(const std::string & color) { this->content_color=color; }
   void SetBorderColor(const std::string & color) { this->border_color=color; }
-
+  std::vector <std::string> Format(std::string input, int l);
   TablePrinter& operator<<(endl input){
     while (j_ != 0){
       *this << "";
@@ -57,18 +59,53 @@ public:
   TablePrinter& operator<<(double input);
 
   template<typename T> TablePrinter& operator<<(T input){
-    if (j_ == 0)
+    if (j_ == 0) // beginning of the table
       *out_stream_ << border_color << "|" << table_color;
+    using namespace std;
+    // Convering input to string
+    ostringstream convert;
+    convert << input ;
+    string toFormat = convert.str();
 
     // Leave 3 extra space: One for negative sign, one for zero, one for decimal
-    *out_stream_ << content_color << std::setw(column_widths_.at(j_))
-                 << input;
+    /*out_stream_ << content_color << std::setw(column_widths_.at(j_))
+    	<< Format(toFormat) ;*/
 
-    if (j_ == get_num_columns()-1){
+    *out_stream_ << content_color << std::setw(column_widths_.at(j_));
+    _note("Set point at " << column_widths_.at(j_));
+    if(toFormat.length() < column_widths_.at(j_)) {
+			_note("Printing table without formatting");
+			*out_stream_ << input;
+    }
+
+    else {
+    	_mark("Printing table with formatting! Max lenght is: " << column_widths_.at(j_));
+    	vector <string> Formatted = Format(toFormat,column_widths_.at(j_));
+
+    	for (auto tmp : Formatted)  {
+    		//_note("Set point at " << column_widths_.at(j_));
+
+    		//*out_stream_ << border_color << separator_ << table_color;
+    		*out_stream_ << tmp ;
+    		*out_stream_ << border_color <<  "|\n" << table_color;
+
+    		*out_stream_ << content_color << std::setw(31);
+    		*out_stream_ << border_color << "|" << table_color;
+
+    		//*this << tmp;
+    		i_ = i_ + 1;
+
+    		//*out_stream_ << content_color << std::setw(column_widths_.at(j_));
+    		//*out_stream_ << content_color << std::setw(column_widths_.at(j_));      //j_ = 0;
+    	}
+
+    }
+
+    if (j_ == get_num_columns()-1){ // end row
       *out_stream_ << border_color <<  "|\n" << table_color;
       i_ = i_ + 1;
       j_ = 0;
-    } else {
+    } else { // only separator
       *out_stream_ << border_color << separator_ << table_color;
       j_ = j_ + 1;
     }

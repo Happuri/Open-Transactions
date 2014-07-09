@@ -72,6 +72,23 @@ void TablePrinter::PrintHeader(){
   *out_stream_ << border_color << "|\n" << no_color;
   PrintHorizontalLine();
 }
+//template<typename T>
+std::vector <std::string> TablePrinter::Format(std::string input, int l) {
+	using namespace std;
+	vector <string> cuts;
+	string token;
+	size_t pos=0;
+
+	while(input.length()>l) {
+		token=input.substr(pos,l);
+		input.erase(pos,l);
+		cuts.push_back(token);
+	}
+
+	cuts.push_back(input);
+	return cuts;
+
+}
 
 void TablePrinter::PrintFooter(){
   PrintHorizontalLine();
