@@ -417,6 +417,12 @@ void cCmdParser::Init() {
 	AddFormat("msg rm-out", {pNym, pOnceInt}, {}, {/*{"--all", , pBool}*/ }, // FIXME proper handle option without parameter!
 		LAMBDA { auto &D=*d; return U.MsgOutRemoveByIndex(D.V(1), stoi(D.V(2)), D.has("--dryrun")); } );
 
+	AddFormat("msg-in ls", {pNym}, {pOnceInt}, {},
+			LAMBDA { auto &D=*d; return U.MsgDisplayInForNym( D.V(1), stoi(D.v(2,"-1")),  D.has("--dryrun") ); } );
+
+	AddFormat("msg-out ls", {pNym}, {pOnceInt}, {},
+			LAMBDA { auto &D=*d; return U.MsgDisplayOutForNym( D.V(1), stoi(D.v(2,"-1")), D.has("--dryrun") ); } );
+
 	//======== ot nym ========
 
 	AddFormat("nym", {}, {}, {},

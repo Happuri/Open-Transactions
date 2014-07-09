@@ -139,6 +139,8 @@ namespace nUse {
 		VALID bool MsgOutCheckIndex(const string & nymName, const int32_t & nIndex);
 
 		EXEC bool MsgDisplayForNym(const string & nymName, bool dryrun);
+		EXEC bool MsgDisplayInForNym(const string & nymName, int id, bool dryrun);
+		EXEC bool MsgDisplayOutForNym(const string & nymName, int id, bool dryrun);
 		EXEC bool MsgSend(const string & nymSender, vector<string> nymRecipient, const string & subject, const string & msg, int prio, bool dryrun);
 		EXEC bool MsgInRemoveByIndex(const string & nymName, const int32_t & nIndex, bool dryrun);
 		EXEC bool MsgOutRemoveByIndex(const string & nymName, const int32_t & nIndex, bool dryrun);
